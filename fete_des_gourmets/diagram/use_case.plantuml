@@ -1,0 +1,87 @@
+@startuml
+/'
+ Concept: This app allows users to create recipes, share them, and receive comments from other users.
+
+    - Users can create, view, edit, and delete recipes.
+    - Users can login, logout, view, and edit their accounts.
+    - Users can be created, viewed, edited, and deleted.
+    - Ingredients can be added to many recipes.
+    - Ingredients can get prices from Makro Page and calculate cost per unit.
+    - Comments can be created, viewed, edited, and deleted.
+    - Recipes can be created, viewed, edited, and deleted.
+    - Admins can manage users, recipes, and comments.
+    - Admins can login, logout, view, and edit their accounts.
+'/
+
+class User {
+  +id: Uuid
+  +username: string
+  +email: string
+  +password: string
+
+  +createRecipe()
+  +viewRecipe()
+  +editRecipe()
+  +deleteRecipe()
+  +login()
+  +logout()
+  +editAccount()
+}
+
+class Admin {
+  +id: Uuid
+  +username: string
+  +email: string
+  +password: string
+
+  +manageUsers()
+  +manageRecipes()
+  +manageComments()
+  +login()
+  +logout()
+  +editAccount()
+}
+
+class Recipe {
+  +id: Uuid
+  +title: string
+  +description: string
+  +createdBy: User
+  +create()
+  +view()
+  +edit()
+  +delete()
+  +addIngredient()
+  +removeIngredient()
+  +calculateCost()
+}
+
+class Comment {
+  +id: Uuid
+  +content: string
+  +author: User
+  +onRecipe: Recipe
+  +create()
+  +view()
+  +edit()
+  +delete()
+}
+
+class Ingredient {
+  +id: Uuid
+  +name: string
+  +costPerUnit: float
+  +unit: string
+  +makroUrl: string
+  +fetchPriceFromMakro()
+}
+
+User "1" -- "0..*" Recipe : creates
+User "1" -- "0..*" Comment : writes
+Recipe "1" -- "0..*" Comment : receives
+Recipe "1" -- "0..*" Ingredient : contains
+Admin "1" -- "0..*" User : manages
+Admin "1" -- "0..*" Recipe : manages
+Admin "1" -- "0..*" Comment : manages
+
+@enduml

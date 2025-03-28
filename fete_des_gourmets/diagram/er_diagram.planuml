@@ -1,0 +1,111 @@
+@startuml
+/' 
+  ER Diagram for the Recipe Sharing App
+'/
+
+entity User {
+  *id: int
+  --
+  username: string
+  first_name: string
+  last_name: string
+  email: string
+  password: string
+  status_id: FK<<Status>>
+  created_at: string
+  updated_at: string
+}
+
+entity Photo {
+  *id: int
+  --
+  url: string
+  status_id: FK<<Status>>
+  created_at: string
+}
+
+entity User_Photo {
+  *user_id: FK<<User>>
+  *photo_id: FK<<Photo>>
+}
+
+entity Recipe {
+  *id: int
+  --
+  title: string
+  description: string
+  status_id: FK<<Status>>
+  created_at: string
+  updated_at: string
+}
+
+entity Recipe_Photo {
+  *recipe_id: FK<<Recipe>>
+  *photo_id: FK<<Photo>>
+}
+
+entity Comment {
+  *id: int
+  --
+  content: string
+  author_id: FK<<User>>
+  recipe_id: FK<<Recipe>>
+  status_id: FK<<Status>>
+  created_at: string
+  updated_at: string
+}
+
+entity Ingredient {
+  *id: int
+  --
+  name: string
+  cost_per_unit: float
+  status_id: FK<<Status>>
+  photo_url: string
+  url: string
+  created_at: string
+  updated_at: string
+}
+
+entity Recipe_Ingredient {
+  *recipe_id: FK<<Recipe>>
+  *ingredient_id: FK<<Ingredient>>
+  quantity: float
+  unit: string
+}
+
+entity Admin {
+  *id: int
+  --
+  username: string
+  email: string
+  password: string
+  created_at: string
+  updated_at: string
+}
+
+enum Status{
+    id: int
+    detail: "active","inactive"
+}
+
+/' Many-to-Many Relationships '/
+User ||--o{ User_Photo : uploads
+User_Photo ||--o{ Photo : contains
+
+Recipe ||--o{ Recipe_Photo : has
+Photo ||--o{ Recipe_Photo : attached_to
+
+Recipe ||--o{ Recipe_Ingredient : contains
+Ingredient ||--o{ Recipe_Ingredient : used_in
+
+/' One-to-Many Relationships '/
+User ||--o{ Recipe : creates
+User ||--o{ Comment : writes
+Recipe ||--o{ Comment : receives
+
+Admin ||--o{ User : manages
+Admin ||--o{ Recipe : manages
+Admin ||--o{ Comment : moderates
+
+@enduml
