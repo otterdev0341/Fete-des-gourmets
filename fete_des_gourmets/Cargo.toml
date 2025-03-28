@@ -9,6 +9,9 @@ edition = "2021"
 [dependencies]
 dioxus = { version = "0.6.0", features = ["router", "fullstack"] }
 wasm-bindgen = "=0.2.99"
+diesel = { version = "2.2.0", features = ["sqlite", "returning_clauses_for_sqlite_3_35"] }
+dotenvy = "0.15"
+
 
 [features]
 default = ["web"]
